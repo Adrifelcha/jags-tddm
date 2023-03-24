@@ -72,7 +72,7 @@ EOF
       echo === Install TDDM module ===
       
       cd $HOME
-      git clone git@github.com:Adrifelcha/jags-tddm.git
+      git clone https://github.com/Adrifelcha/jags-tddm.git
       cd jags-tddm && ./makedtddm.sh
 
 
