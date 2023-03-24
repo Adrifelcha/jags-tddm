@@ -30,7 +30,7 @@ write('
         model{
               # Likelihood
                 for (i in 1:N) {
-                     X[i,1:2] ~ dcddm(xdrift, ydrift, bound, ter0)
+                     X[i,1:2] ~ dtddm(xdrift, ydrift, bound, ter0)
                     }
               # Priors
                 xdrift  ~ dnorm(0, .1)
