@@ -1,7 +1,7 @@
 load dic
-load cddm
-model in "test/cddm.bug"
-data in "test/cddm.data"
+load tddm
+model in "test/tddm.bug"
+data in "test/tddm.data"
 compile, nchains(1)
 initialize
 update 5

@@ -2,7 +2,7 @@
 
 Implements the Thurstonian extension of the circular drift diffusion model in JAGS.
 
-`git clone`, and `./makedcddm.sh` should install the module.
+`git clone`, and `./makedtddm.sh` should install the module.
 
 In JAGS, `load tddm` as a module.
 

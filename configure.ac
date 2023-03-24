@@ -2,14 +2,14 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.68])
 
-AC_INIT([JAGS-CDDM],[0.1],[joachim@uci.edu],[JAGS-CDDM-MODULE])
+AC_INIT([JAGS-TDDM],[0.1],[joachim@uci.edu],[JAGS-TDDM-MODULE])
 JAGS_MAJOR=4
 JAGS_MINOR=0
 AC_SUBST(JAGS_MAJOR)
 AC_SUBST(JAGS_MINOR)
 
 AC_CANONICAL_HOST
-AC_CONFIG_SRCDIR([src/distributions/DCDDM.cc])
+AC_CONFIG_SRCDIR([src/distributions/TDDM.cc])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([subdir-objects])

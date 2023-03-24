@@ -1,11 +1,11 @@
 #!/bin/bash
 
-cp -r /home/vagrant/jags-cddm /tmp/
+cp -r ../jags-tddm /tmp/
 
-cd /tmp/jags-cddm
+cd /tmp/jags-tddm
 
 autoreconf -fvi && ./configure --prefix=/usr
 
 make && sudo make install
 
-sudo cp /usr/lib/JAGS/modules-4/cddm.* /usr/lib/x86_64-linux-gnu/JAGS/modules-4/ #todo
+sudo cp /usr/lib/JAGS/modules-4/tddm.* /usr/lib/x86_64-linux-gnu/JAGS/modules-4/ #todo

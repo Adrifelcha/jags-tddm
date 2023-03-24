@@ -1,15 +1,15 @@
 SUBDIRS = distributions
 
-jagsmod_LTLIBRARIES = cddm.la
+jagsmod_LTLIBRARIES = tddm.la
 
-cddm_la_SOURCES = cddm.cc
+tddm_la_SOURCES = tddm.cc
 
-cddm_la_CPPFLAGS = -I$(includedir)/JAGS
+tddm_la_CPPFLAGS = -I$(includedir)/JAGS
 
-cddm_la_LIBADD = distributions/cddmdist.la
-cddm_la_LIBADD += -ljags -ljrmath
+tddm_la_LIBADD = distributions/tddmdist.la
+tddm_la_LIBADD += -ljags -ljrmath
 
-cddm_la_LDFLAGS = -module -avoid-version
+tddm_la_LDFLAGS = -module -avoid-version
 
 
 

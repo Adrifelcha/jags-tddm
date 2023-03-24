@@ -1,10 +1,10 @@
-/* ==========================
-    Circular diffusion model
-   ==========================
+/* ===================================
+    Thurstonian drift-diffusion model
+   ===================================
 */
 
 #include <config.h>
-#include "DCDDM.h"
+#include "DTDDM.h"
 
 #include <util/dim.h>
 #include <rng/RNG.h>
@@ -17,10 +17,10 @@ using std::vector;
 using std::log;
 using std::string;
 
-static inline double DRIFT (vector<double const*> const &par) { return *par[0]; }
-static inline double BOUND (vector<double const*> const &par) { return *par[1]; }
-static inline double TZERO (vector<double const*> const &par) { return *par[2]; }
-static inline double THETA (vector<double const*> const &par) { return *par[3]; }
+static inline double XDRIFT (vector<double const*> const &par) { return *par[0]; }
+static inline double YDRIFT (vector<double const*> const &par) { return *par[1]; }
+static inline double BOUND  (vector<double const*> const &par) { return *par[2]; }
+static inline double TZERO  (vector<double const*> const &par) { return *par[3]; }
 
 const double inv2pi = 0.159154943091895;
 const double log2pi = 1.837877066409345;
@@ -58,18 +58,18 @@ const double j0_squared[] =
 #define DEBUG FALSE
 
 namespace jags {
-	namespace cddm {
+	namespace tddm {
 
-		DCDDM::DCDDM()
-			: VectorDist("dcddm", 4)
+		DTDDM::DTDDM()
+			: VectorDist("dtddm", 4)
 		{}
 
-		unsigned int DCDDM::length(vector<unsigned int> const &len) const
+		unsigned int DTDDM::length(vector<unsigned int> const &len) const
 		{
 			return 2;
 		}
 
-		bool DCDDM::checkParameterLength(vector<unsigned int> const &len) const
+		bool DTDDM::checkParameterLength(vector<unsigned int> const &len) const
 		{
 			if (DEBUG) printf("checkParameterLength() has been called\n");
 
@@ -80,15 +80,13 @@ namespace jags {
 			return true;
 		}
 
-		bool DCDDM::checkParameterValue(vector<double const *> const &par,
+		bool DTDDM::checkParameterValue(vector<double const *> const &par,
 				vector<unsigned int> const &len) const
 		{
 			if (DEBUG) printf("checkParameterValue() has been called\n");
 
-			double drift = DRIFT(par);
 			double bound = BOUND(par);
 			double tzero = TZERO(par);
-			double theta = THETA(par);
 
 			if (tzero < 0)  return false;
 			if (bound < 0)  return false;
@@ -96,7 +94,7 @@ namespace jags {
 			return true;
 		}
 
-		double DCDDM::logDensity(double const *x, unsigned int length,
+		double DTDDM::logDensity(double const *x, unsigned int length,
 				PDFType type,
 				vector<double const *> const &par,
 				vector<unsigned int> const &len,
@@ -105,20 +103,16 @@ namespace jags {
 			double c = x[0];
 			double t = x[1];
 
-			double drift = DRIFT(par);
 			double bound = BOUND(par);
 			double tzero = TZERO(par);
-			double theta = THETA(par);
+			double mu1 = XDRIFT(par);
+			double mu2 = YDRIFT(par);
 			double inva2 = 1.0 / (bound*bound);
 
 			if (DEBUG) printf("c: %f | t: %f\n", c, t);
-			if (DEBUG) printf("drift: %f | bound: %f | tzero %f | theta %f\n", drift,bound,tzero,theta);
+			if (DEBUG) printf("xdrift: %f | ydrift: %f | bound: %f | tzero %f\n", mu1, mu2, bound, tzero);
 
 			double exponand, sum = 0.0, logPDF;
-
-			double mu1 = drift*cos(theta), mu2 = drift*sin(theta);
-			if (DEBUG) printf("mu1: %f = %f * cos(%f)\n", mu1, drift, theta);
-			if (DEBUG) printf("mu2: %f = %f * sin(%f)\n", mu2, drift, theta);
 
 			for (int i=0; i<smax; i++) {
 				exponand = j0_squared[i] * (t-tzero) * inva2 * -0.5;
@@ -129,13 +123,13 @@ namespace jags {
 
 			logPDF = log(sum) + log(inva2);
 			logPDF += bound*(mu1*cos(c)+mu2*sin(c));
-			logPDF -= (drift*drift*(t-tzero))*0.5;
+			logPDF -= ((mu1*mu1 + mu2*mu2)*(t-tzero))*0.5;
 			if (DEBUG) printf("logPDF = %f\n", logPDF);
 
 			return isnan(logPDF) ? JAGS_NEGINF : logPDF;
 		}
 
-		void DCDDM::randomSample(double *x, unsigned int length,
+		void DTDDM::randomSample(double *x, unsigned int length,
 				vector<double const *> const &par,
 				vector<unsigned int> const &len,
 				double const *lower, double const *upper,
@@ -146,7 +140,7 @@ namespace jags {
 			return;
 		}
 
-		void DCDDM::support(double *lower, double *upper, unsigned int length,
+		void DTDDM::support(double *lower, double *upper, unsigned int length,
 			   vector<double const *> const &par,
 			   vector<unsigned int> const &len) const
 		{
@@ -156,7 +150,7 @@ namespace jags {
 			upper[1] = JAGS_POSINF;
 		}
 
-		void DCDDM::typicalValue(double *x, unsigned int length,
+		void DTDDM::typicalValue(double *x, unsigned int length,
 				vector<double const *> const &par,
 				vector<unsigned int> const &len,
 				double const *lower, double const *upper) const
@@ -165,16 +159,16 @@ namespace jags {
 			x[1] = 0.5;
 		}
 
-		bool DCDDM::isSupportFixed(vector<bool> const &fixmask) const
+		bool DTDDM::isSupportFixed(vector<bool> const &fixmask) const
 		{
 			return true;
 		}
 
-		unsigned int DCDDM::df(vector<unsigned int> const &len) const
+		unsigned int DTDDM::df(vector<unsigned int> const &len) const
 		{
 			return 1;
 		}
 
-	} //namespace cddm
+	} //namespace tddm
 
 } //namespace jags

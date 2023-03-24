@@ -1,9 +1,9 @@
-noinst_LTLIBRARIES = cddmdist.la
+noinst_LTLIBRARIES = tddmdist.la
 
-cddmdist_la_CPPFLAGS = -I$(top_srcdir)/src -I$(includedir)/JAGS
+tddmdist_la_CPPFLAGS = -I$(top_srcdir)/src -I$(includedir)/JAGS
 
-cddmdist_la_LDFLAGS = -no-undefined -module -avoid-version
+tddmdist_la_LDFLAGS = -no-undefined -module -avoid-version
 
-cddmdist_la_SOURCES = DCDDM.cc
+tddmdist_la_SOURCES = DTDDM.cc
 
-noinst_HEADERS = DCDDM.h
+noinst_HEADERS = DTDDM.h

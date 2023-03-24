@@ -1,29 +1,29 @@
-/*  This class contains functions for the cddm (diffusion) model */
-#ifndef DCDDM_H_
-#define DCDDM_H_
+/*  This class contains functions for the tddm (Thurstonian drift-diffusion model) */
+#ifndef DTDDM_H_
+#define DTDDM_H_
 
 #include <distribution/VectorDist.h>
 
 namespace jags {
 
-	namespace cddm {
+	namespace tddm {
 
 	/**
-	 * Implements the circular drift diffusion model
+	 * Implements the Thurstonian drift-diffusion model
 	 *
 	 * <pre>
          * X[i,1] <- choice (in radians)
          * X[i,2] <- response time (in seconds)
-         * X[i,1:2] ~ dcddm(drift, bound, tzero, theta)
+         * X[i,1:2] ~ dtddm(xdrift, ydrift, bound, tzero)
 	 * </pre>
          *
-	 * @short circular drift diffusion model
+	 * @short Thurstonian drift diffusion model
 	 */
 
-		class DCDDM : public VectorDist
+		class DTDDM : public VectorDist
 		{
 		public:
-			DCDDM();
+			DTDDM();
 
 			unsigned int length(std::vector<unsigned int> const &len) const;
 
@@ -58,7 +58,7 @@ namespace jags {
 			unsigned int df(std::vector<unsigned int> const &len) const;
 
 		};
-	} //namespace cddm
+	} //namespace tddm
 } //namespace jags
 
-#endif /* DCDDM_H_ */
+#endif /* DTDDM_H_ */

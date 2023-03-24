@@ -2,7 +2,7 @@ model {
 
 	# Likelihood
 	for (i in 1:N) {
-		X[1:2,i] ~ dcddm(drift, bound, ter0, theta0)
+		X[1:2,i] ~ dtddm(drift, bound, ter0, theta0)
 	}
 
 	# Priors

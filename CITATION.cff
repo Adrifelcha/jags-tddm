@@ -4,10 +4,12 @@ authors:
 - family-names: "Vandekerckhove"
   given-names: "Joachim"
   orcid: "https://orcid.org/0000-0003-2600-5937"
-title: "jags-cddm"
-date-released: 2022-08-18
-version: 0.0.2
-url: "https://github.com/joachimvandekerckhove/jags-cddm"
+- family-names: "Chávez De la Peña"
+  given-names: "Adriana F."
+title: "jags-tddm"
+date-released: 2023-03-25
+version: 0.0.1
+url: "https://github.com/Adrifelcha/jags-tddm"
 preferred-citation:
   type: article
   authors:

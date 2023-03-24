@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2022 Joachim Vandekerckhove <joachim@uci.edu>
+ *  Copyright (C) 2023 Joachim Vandekerckhove <joachim@uci.edu>
+ *                     Adriana F. Chávez De la Peña <achavezd@uci.edu>
  *
  *  When using this module, please cite:
  *      Wabersich, D., & Vandekerckhove, J. (2014). Extending JAGS: A
@@ -22,28 +23,28 @@
  *
  */
 #include <module/Module.h>
-#include <distributions/DCDDM.h>
+#include <distributions/DTDDM.h>
 
 using std::vector;
 
 namespace jags {
-namespace cddm {
+namespace tddm {
 
-class CDDMModule : public Module {
+class TDDMModule : public Module {
   public:
-    CDDMModule();
-    ~CDDMModule();
+    TDDMModule();
+    ~TDDMModule();
 };
 
-CDDMModule::CDDMModule() : Module("cddm")
+TDDMModule::TDDMModule() : Module("tddm")
 {
-  DCDDM *cddmdist;
-  cddmdist = new DCDDM();
+  DTDDM *tddmdist;
+  tddmdist = new DTDDM();
   //load distributions
-  insert(cddmdist);
+  insert(tddmdist);
 }
 
-CDDMModule::~CDDMModule()
+TDDMModule::~TDDMModule()
 {
   vector<Function*> const &fvec = functions();
   for (unsigned int i = 0; i < fvec.size(); ++i) {
@@ -55,7 +56,7 @@ CDDMModule::~CDDMModule()
   }
 }
 
-} // namespace cddm
+} // namespace tddm
 } // namespace jags
 
-jags::cddm::CDDMModule _cddm_module;
+jags::tddm::TDDMModule _tddm_module;

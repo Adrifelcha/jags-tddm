@@ -15,8 +15,8 @@ end
 Vagrant.configure("2") do |config|
 
   config.vm.box = "ubuntu/focal64"
-  config.vm.hostname = "cddm-haver"
-  config.vm.define "cddm-haver"
+  config.vm.hostname = "tddm-haver"
+  config.vm.define "tddm-haver"
   config.vm.synced_folder ".", "/srv/host/"
   config.vm.network "forwarded_port", guest: 8787, host: 8788
 
@@ -69,11 +69,11 @@ EOF
       ssh-keyscan github.com >> $HOME/.ssh/known_hosts
 
       
-      echo === Install CDDM module ===
+      echo === Install TDDM module ===
       
       cd $HOME
-      git clone git@github.com:joachimvandekerckhove/jags-cddm.git
-      cd jags-cddm && ./makedcddm.sh
+      git clone git@github.com:Adrifelcha/jags-tddm.git
+      cd jags-tddm && ./makedtddm.sh
 
 
       echo === Install von Mises module ===
@@ -88,12 +88,6 @@ EOF
           sudo cp /usr/lib/JAGS/modules-4/vonmises.* /usr/lib/x86_64-linux-gnu/JAGS/modules-4/ #todo
           
           
-      echo === Download examples ===
-      
-      cd $HOME
-      git clone git@github.com:Adrifelcha/cddm-sampleFiles.git
-      
-      
       echo === Convenience aliases ===
       
       echo "alias sl='ls -ltr'" >> ~/.bashrc
@@ -113,7 +107,7 @@ EOF
 
       echo === Testing ===
 
-      echo 'load cddm' | jags
+      echo 'load tddm' | jags
       echo 'load vonmises' | jags
       git config -l
 
