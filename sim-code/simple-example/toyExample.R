@@ -15,7 +15,6 @@ load.module("tddm")
 # Step 1. Load and prepare data
 ################################################################################
 source("./toyData.R")    # Run Rscript that loads/generates data file as needed
-datos <- t(datos)        # Data file needs to be transposed (2-by-trials)
 
 X <- datos
 N <- ncol(X)
@@ -25,7 +24,7 @@ N <- ncol(X)
 modelFile <- "tddm.bug"
 write('
         data {
-              tmin <- 0.95 * min(X[2,])
+              tmin <- 0.95 * min(X[,2])
         }
         model{
               # Likelihood
