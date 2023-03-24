@@ -11,6 +11,12 @@ In JAGS, `load tddm` as a module.
 ## Vagrantfile
 
 If you use Vagrant, the Vagrantfile spawns a VM that installs and tests this module.
+
+- Initiate VM for the first time `vagrant up`
+- Enter VM `vagrant ssh`
+- Suspend VM `vagrant suspend`
+- Close VM `vagrant destroy`
+
 May require a GitHub account with associated keyfile.
 
 ## Pre-release
