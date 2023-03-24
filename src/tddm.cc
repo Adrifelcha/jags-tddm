@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2023 Joachim Vandekerckhove <joachim@uci.edu>
- *                     Adriana F. Chávez De la Peña <achavezd@uci.edu>
+ *                     Adriana F. Chavez De la Pena <achavezd@uci.edu>
  *
  *  When using this module, please cite:
  *      Wabersich, D., & Vandekerckhove, J. (2014). Extending JAGS: A
