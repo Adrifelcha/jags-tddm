@@ -9,7 +9,7 @@ AC_SUBST(JAGS_MAJOR)
 AC_SUBST(JAGS_MINOR)
 
 AC_CANONICAL_HOST
-AC_CONFIG_SRCDIR([src/distributions/TDDM.cc])
+AC_CONFIG_SRCDIR([src/distributions/DTDDM.cc])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([subdir-objects])
