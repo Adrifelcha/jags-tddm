@@ -98,12 +98,16 @@ cddm.randomWalk <- function(trials, mu1, mu2, boundary, ndt=0.1, drift.Coeff=1, 
             whileLoopNo <- whileLoopNo + 1    # Register while loop iteration
       }
     
-      if(pass > boundary){
-          get.Angle <- cddm.coordToDegrees(c(state[t,1,a],state[t,2,a]))
-          get.Radians <- cddm.degToRad(get.Angle)
-          final.coord <- cddm.polarToRect(get.Radians,boundary)
-          final.x <- final.coord$mu1
-          final.y <- final.coord$mu2
+      if(pass > boundary){ # Once the boundary has been passed...
+          # Transform the rectangular coordinates of final state into polar coordinates
+          get.Polar <- rectToPolar(state[t,1,a],state[t,2,a])
+          # Isolate the radians
+          get.Radians <- get.Polar[,"dAngle"] %% (2*pi)
+          # Identify the exact point touching the circumference
+          final.coord <- polarToRect(get.Radians,boundary)
+          # Save these coordinate points on the circle
+          final.x <- final.coord$x
+          final.y <- final.coord$y
           state[t,,a] <- c(final.x,final.y)
       }
   }
@@ -255,92 +259,3 @@ tddm.simData <- function(trials, boundary, kappa=NA, nCategories=NA,
   colnames(output) <- c("choice.cat", "choice.rad", "rt")
   return(output)
 }
-
-
-############################################################################
-#####  Plotting functions
-#####  Note: The margins of the plotting space may need to be adjusted to 
-#####        fully appreciate the symmetry of the circle drawn on screen.
-############################################################################
-all.Angles <- seq(0,2*pi,0.001)
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Plot the random walk (and RT distribution) from cddm.randomWalk()
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cddm.plotRW <- function(randomWalk){
-  state  <- randomWalk$state
-  finalT <- randomWalk$RT
-  trials <- length(finalT)
-  choices <- cddm.getFinalState(state)
-  boundary <- cddm.getVectorLength(choices[1,1],choices[1,2])
-  boundary <- round(boundary,2)
-  
-  circle <- cddm.polarToRect(all.Angles,boundary)
-  
-  par(mfrow = c(1,2))  # Open space for 2 plots
-  pm <- boundary+0.5 #Plot margin
-  plot(-10:10,-10:10,type="n", ann = FALSE, axes = FALSE,
-       xlim=c(-pm,pm),ylim=c(-pm,pm))
-  for(b in 1:trials){
-    points(state[,,b], type = "l", col=rgb(1,0,0.5,0.1))
-  }
-  points(circle[,1],circle[,2], type="l")
-  abline(h = 0, lty=2, col="gray50")
-  abline(v = 0, lty=2, col="gray50")
-  legend("topright",paste("No. trials =", trials), 
-         pch=16, col="white",bty = "n", cex=0.8)
-  for(b in 1:trials){
-    points(choices[b,1],choices[b,2], type = "p", pch =16, cex=0.9,
-           col=rgb(0.75,0.25,0.5,0.2))
-  }
-  
-  maxRT <- max(finalT)+5
-  x.axis <- round(c(0,seq(0,maxRT,length.out=10)),2)
-  hist(finalT, col = "darkorchid4", breaks = 50, ann=FALSE, axes=FALSE)
-  mtext("Response Times", 1, line=2, f=2)
-  mtext("Frequency", 2, line = 2.5, cex=0.8)
-  axis(2, seq(0,trials,5), seq(0,trials,5), las=2)
-  axis(1, x.axis,x.axis)
-  
-  par(mfrow = c(1,1)) #As a precaution, go back to single plot spaces
-}
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Plot  observed choices and RT
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cddm.plotData <- function(randomWalk.bivariateData){
-  choice <- randomWalk.bivariateData$Choice
-  RT <- randomWalk.bivariateData$RT
-  trials <- length(RT)
-  
-  direction <- cddm.radToDeg(choice) # Transform radian choices into degrees
-  boundary <- 9 # Arbitrary radius, used to define magnitude
-  circle <- cddm.polarToRect(all.Angles,boundary)
-  magnitude <- rep(boundary,length(choice)) 
-  coord.on.circumference <- cddm.polarToRect(choice,magnitude) #get Rectangular coordinates
-  
-  par(mfrow = c(1,2))  # Open space for 2 plots
-  
-  plot(-10:10,-10:10,type="n", ann = FALSE, axes = FALSE)
-  for(b in 1:trials){
-    points(coord.on.circumference[b,1],coord.on.circumference[b,2], 
-           type = "p", pch =16, cex=0.9,
-           col=rgb(0.75,0.25,0.5,0.2))
-  }
-  points(circle[,1],circle[,2], type="l")
-  abline(h = 0, lty=2, col="gray50")
-  abline(v = 0, lty=2, col="gray50")
-  legend("topright",paste("No. trials =", trials), 
-         pch=16, col="white",bty = "n", cex=0.8)
-  
-  maxRT <- max(RT)+5
-  x.axis <- round(c(0,seq(0,maxRT,length.out=10)),2)
-  hist(RT, col = "darkorchid4", breaks = 50, ann=FALSE, axes=FALSE)
-  mtext("Response Times", 1, line=2, f=2)
-  mtext("Frequency", 2, line = 2.5, cex=0.8)
-  axis(2, seq(0,trials,5), seq(0,trials,5), las=2)
-  axis(1, x.axis,x.axis)
-  
-  par(mfrow = c(1,1)) #As a precaution, go back to single plot spaces
-}
-
