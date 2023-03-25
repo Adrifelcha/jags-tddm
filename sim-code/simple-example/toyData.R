@@ -6,8 +6,7 @@
 ###  The data is generated from a fixed set of parameters
 ############################################################################################
 # Load customized functions
-source("../Functions/generateRandomParameterValues.R")
-source("../Functions/simulateDataCDDM.R")
+source("../Functions/simulateData.R")
 
 # Step 0. Load the fixed parameter values used in the simulation
 trials = 200
@@ -29,13 +28,14 @@ file.not.found <- !file.exists(searchFile)
 		      simulateData <- cddm.simData(trials = trials, 
 						   drift.Angle = true.drift.Angle,
 						   drift.Length = true.drift.Length,
-						   thresh = true.bound,
+						   boundary = true.bound,
 						   ndt = true.ndt)
+		      simulateData <- simulateData$data
 		# Store data into a toyData.csv file
-		       write.csv(simulateData,"./toyData.csv",row.names = FALSE)
+		      write.csv(simulateData,"./toyData.csv",row.names = FALSE)
       }
       # Read data
-      datos <- read.csv("./toyData.csv")    
+      datos <- read.csv("./toyData.csv")
 
 # Step 3. Plot the data
 cddm.plotData(datos)
